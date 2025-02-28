@@ -18,20 +18,25 @@ small_font = pg.font.Font(None,30)
 
 
 ######################## SIZES AND COORDINATES #############################
-card_size = (135,220)
+card_size = (145,240)
 marker_size = (card_size[0]+8,card_size[1]+8)
 marker_width = 5; marker_radius = 10
-coordinates_sig = (screen_width//2-400,screen_height//2 + 110)
-coordinates_covers = (coordinates_sig[0]-150,coordinates_sig[1])
-coordinates_crosses = (coordinates_sig[0]+150,coordinates_sig[1])
-coordinates_crowns = (coordinates_sig[0],coordinates_sig[1]-230)
-coordinates_beneath = (coordinates_sig[0],coordinates_sig[1]+230)
-coordinates_behind = (coordinates_sig[0]+300,coordinates_sig[1])
-coordinates_before = (coordinates_sig[0]-300,coordinates_sig[1])
-coordinates_self = (coordinates_sig[0]+450,coordinates_beneath[1])
-coordinates_house = (coordinates_self[0],coordinates_self[1]-230)
-coordinates_hopes = (coordinates_self[0],coordinates_self[1]-460)
-coordinates_outcome = (coordinates_self[0],coordinates_self[1]-690)
+
+x_offset = 155
+y_offset = 250
+
+
+coordinates_sig = (screen_width//2-500,screen_height//2 + 125)
+coordinates_covers = (coordinates_sig[0]-x_offset,coordinates_sig[1])
+coordinates_crosses = (coordinates_sig[0]+x_offset,coordinates_sig[1])
+coordinates_crowns = (coordinates_sig[0],coordinates_sig[1]-y_offset)
+coordinates_beneath = (coordinates_sig[0],coordinates_sig[1]+y_offset)
+coordinates_behind = (coordinates_sig[0]+(x_offset*2),coordinates_sig[1])
+coordinates_before = (coordinates_sig[0]-(x_offset*2),coordinates_sig[1])
+coordinates_self = (coordinates_sig[0]+(x_offset*3),coordinates_beneath[1])
+coordinates_house = (coordinates_self[0],coordinates_self[1]-y_offset)
+coordinates_hopes = (coordinates_self[0],coordinates_self[1]-(y_offset*2))
+coordinates_outcome = (coordinates_self[0],coordinates_self[1]-(y_offset*3))
 coordinates_display_title = 1130,50
 coordinates_display_subtitle = 1080,100
 coordinates_description = 1070,200
@@ -181,7 +186,6 @@ if True:
         dscr_Ns = "He is riding in full course, as if scattering his enemies. In the design he is really a prototypical hero of romantic chivalry. He might almost be Galahad, whose sword is swift and sure because he is clean of heart. Divinatory Meanings: Skill, bravery, capacity, defence, address, enmity, wrath, war, destruction, opposition, resistance, ruin. There is therefore a sense in which the card signifies death, but it carries this meaning only in its proximity to other cards of fatality. Reversed: Imprudence, incapacity, extravagance."
         dscr_Qs = "Her right hand raises the weapon vertically and the hilt rests on an arm of her royal chair. The left hand is extended, the arm raised her countenance is severe but chastened; it suggests familiarity with sorrow. It does not represent mercy, and, her sword notwithstanding, she is scarcely a symbol of power. Divinatory Meanings: Widowhood, female sadness and embarrassment, absence, sterility, mourning, privation, separation. Reversed: Malice, bigotry, artifice, prudery, bale, deceit."
         dscr_Ks = "He sits in judgment, holding the unsheathed sign of his suit. He recalls, of course, the conventional Symbol of justice in the Trumps Major, and he may represent this virtue, but he is rather the power of life and death, in virtue of his office. Divinatory Meanings: Whatsoever arises out of the idea of judgment and all its connexions-power, command, authority, militant intelligence, law, offices of the crown, and so forth. Reversed: Cruelty, perversity, barbarity, perfidy, evil intention."
-
 
 # Major Arcana
 if True:
@@ -496,7 +500,7 @@ class Reading():
 
 
     def draw_significator(self):
-        global display_significator_desc
+        global display_significator_desc, c0_bigcard_surf
         while self.c0 == 0 or self.c0 in [t1r,t2r]:
             self.c0 = rng.choice(self.deck)
         self.deck.remove(self.c0)
@@ -504,9 +508,10 @@ class Reading():
         self.c0.reversed = False
         display_significator_desc = f'{self.c0.desc}'
         self.c0.rect.center = (coordinates_sig)
+        c0_bigcard_surf = pg.transform.scale(self.c0.image, bigcard_size)
 
     def draw_covers(self):
-        global display_covers_desc
+        global display_covers_desc, c1_bigcard_surf
         self.c1 = rng.choice(self.deck)
         self.deck.remove(self.c1)
         self.board.append(self.c1)
@@ -515,18 +520,20 @@ class Reading():
             self.c1.image = pg.transform.rotate(self.c1.image, 180)
         display_covers_desc = f'{self.c1.desc}'
         self.c1.rect.center = (coordinates_covers)
+        c1_bigcard_surf = pg.transform.scale(self.c1.image, bigcard_size)
 
     def draw_crosses(self):
-        global display_crosses_desc
+        global display_crosses_desc, c2_bigcard_surf
         self.c2 = rng.choice(self.deck)
         self.deck.remove(self.c2)
         self.board.append(self.c2)
         self.c2.reversed = False
         display_crosses_desc = f'{self.c2.desc}'
         self.c2.rect.center = (coordinates_crosses)
+        c2_bigcard_surf = pg.transform.scale(self.c2.image, bigcard_size)
 
     def draw_crowns(self):
-        global display_crowns_desc
+        global display_crowns_desc, c3_bigcard_surf
         self.c3 = rng.choice(self.deck)
         self.deck.remove(self.c3)
         self.board.append(self.c3)
@@ -535,9 +542,10 @@ class Reading():
             self.c3.image = pg.transform.rotate(self.c3.image, 180)
         display_crowns_desc = f'{self.c3.desc}'
         self.c3.rect.center = (coordinates_crowns)
+        c3_bigcard_surf = pg.transform.scale(self.c3.image, bigcard_size)
 
     def draw_beneath(self):
-        global display_beneath_desc
+        global display_beneath_desc, c4_bigcard_surf
         self.c4 = rng.choice(self.deck)
         self.deck.remove(self.c4)
         self.board.append(self.c4)
@@ -546,9 +554,10 @@ class Reading():
             self.c4.image = pg.transform.rotate(self.c4.image, 180)
         display_beneath_desc = f'{self.c4.desc}'
         self.c4.rect.center = (coordinates_beneath)
+        c4_bigcard_surf = pg.transform.scale(self.c4.image, bigcard_size)
 
     def draw_behind(self):
-        global display_behind_desc
+        global display_behind_desc, c5_bigcard_surf
         self.c5 = rng.choice(self.deck)
         self.deck.remove(self.c5)
         self.board.append(self.c5)
@@ -557,9 +566,10 @@ class Reading():
             self.c5.image = pg.transform.rotate(self.c5.image, 180)
         display_behind_desc = f'{self.c5.desc}'
         self.c5.rect.center = (coordinates_behind)
+        c5_bigcard_surf = pg.transform.scale(self.c5.image, bigcard_size)
 
     def draw_before(self):
-        global display_before_desc
+        global display_before_desc, c6_bigcard_surf
         self.c6 = rng.choice(self.deck)
         self.deck.remove(self.c6)
         self.board.append(self.c6)
@@ -568,9 +578,10 @@ class Reading():
             self.c6.image = pg.transform.rotate(self.c6.image, 180)
         display_before_desc = f'{self.c6.desc}'
         self.c6.rect.center = (coordinates_before)
+        c6_bigcard_surf = pg.transform.scale(self.c6.image, bigcard_size)
 
     def draw_self(self):
-        global display_self_desc
+        global display_self_desc, c7_bigcard_surf
         self.c7 = rng.choice(self.deck)
         self.deck.remove(self.c7)
         self.board.append(self.c7)
@@ -579,9 +590,10 @@ class Reading():
             self.c7.image = pg.transform.rotate(self.c7.image, 180)
         display_self_desc = f'{self.c7.desc}'
         self.c7.rect.center = (coordinates_self)
+        c7_bigcard_surf = pg.transform.scale(self.c7.image, bigcard_size)
 
     def draw_house(self):
-        global display_house_desc
+        global display_house_desc, c8_bigcard_surf
         self.c8 = rng.choice(self.deck)
         self.deck.remove(self.c8)
         self.board.append(self.c8)
@@ -590,10 +602,10 @@ class Reading():
             self.c8.image = pg.transform.rotate(self.c8.image, 180)
         display_house_desc = f'{self.c8.desc}'
         self.c8.rect.center = (coordinates_house)
-
+        c8_bigcard_surf = pg.transform.scale(self.c8.image, bigcard_size)
 
     def draw_hopes(self):
-        global display_hopes_desc
+        global display_hopes_desc, c9_bigcard_surf
         self.c9 = rng.choice(self.deck)
         self.deck.remove(self.c9)
         self.board.append(self.c9)
@@ -602,9 +614,10 @@ class Reading():
             self.c9.image = pg.transform.rotate(self.c9.image, 180)
         display_hopes_desc = f'{self.c9.desc}'
         self.c9.rect.center = (coordinates_hopes)
+        c9_bigcard_surf = pg.transform.scale(self.c9.image, bigcard_size)
 
     def draw_outcome(self):
-        global display_outcome_desc
+        global display_outcome_desc, c10_bigcard_surf
         self.c10 = rng.choice(self.deck)
         self.deck.remove(self.c10)
         self.board.append(self.c10)
@@ -613,6 +626,7 @@ class Reading():
             self.c10.image = pg.transform.rotate(self.c10.image, 180)
         display_outcome_desc = f'{self.c10.desc}'
         self.c10.rect.center = (coordinates_outcome)
+        c10_bigcard_surf = pg.transform.scale(self.c10.image, bigcard_size)
 
 
 game = Reading()
@@ -654,9 +668,12 @@ def draw_wrapped_text(surface, text, font, color, rect, line_spacing=5):
         rendered_line = font.render(line, True, color)
         surface.blit(rendered_line, (x, y))
 
-description_rect = pg.Rect(1080, 300, 600, 200)
+description_rect = pg.Rect(980, 300, 600, 200)
 
 
+####################################### BIG CARD ON MOUSEOVER ##################################################
+bigcard_size = (card_size[0]*2,card_size[1]*2)
+bigcard_rect = (490,10)
 
 ############################### GAME LOOOP ######################################
 counter = 5
@@ -741,11 +758,10 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
-            pg.quit()
         else:
             mouse_pos = pg.mouse.get_pos()
             if event.type == pg.MOUSEBUTTONDOWN:
-
+                # Clicking Buttons
                 if draw_button_rect.collidepoint(mouse_pos):
                     game.draw_card()
                 if all_button_rect.collidepoint(mouse_pos):
@@ -753,6 +769,7 @@ while running:
                 if reset_button_rect.collidepoint(mouse_pos):
                     game.reset()
             if event.type == pg.MOUSEMOTION:
+                # Mouseover Cards
                 if game.c0 != 0:
                     if game.c0.rect.collidepoint(mouse_pos):
                         display_significator = True
@@ -915,46 +932,57 @@ while running:
         screen.blit(display_significator_text,display_significator_rect)
         draw_wrapped_text(screen,display_significator_desc,small_font,'Black',description_rect)
         screen.blit(display_significator_subtext,coordinates_display_subtitle)
+        screen.blit(c0_bigcard_surf,bigcard_rect)
     if display_covers:
         screen.blit(display_covers_text,display_covers_rect)
         draw_wrapped_text(screen,display_covers_desc,small_font,'Black',description_rect)
         screen.blit(display_covers_subtext, coordinates_display_subtitle)
+        screen.blit(c1_bigcard_surf, bigcard_rect)
     if display_crosses:
         screen.blit(display_crosses_text,display_crosses_rect)
         draw_wrapped_text(screen,display_crosses_desc,small_font,'Black',description_rect)
         screen.blit(display_crosses_subtext, coordinates_display_subtitle)
+        screen.blit(c2_bigcard_surf, bigcard_rect)
     if display_crowns:
         screen.blit(display_crowns_text,display_crowns_rect)
         draw_wrapped_text(screen,display_crowns_desc,small_font,'Black',description_rect)
         screen.blit(display_crowns_subtext, coordinates_display_subtitle)
+        screen.blit(c3_bigcard_surf, bigcard_rect)
     if display_beneath:
         screen.blit(display_beneath_text,display_beneath_rect)
         draw_wrapped_text(screen,display_beneath_desc,small_font,'Black',description_rect)
         screen.blit(display_beneath_subtext, coordinates_display_subtitle)
+        screen.blit(c4_bigcard_surf, bigcard_rect)
     if display_behind:
         screen.blit(display_behind_text,display_behind_rect)
         draw_wrapped_text(screen,display_behind_desc,small_font,'Black',description_rect)
         screen.blit(display_behind_subtext, coordinates_display_subtitle)
+        screen.blit(c5_bigcard_surf, bigcard_rect)
     if display_before:
         screen.blit(display_before_text,display_before_rect)
         draw_wrapped_text(screen,display_before_desc,small_font,'Black',description_rect)
         screen.blit(display_before_subtext, coordinates_display_subtitle)
+        screen.blit(c6_bigcard_surf, bigcard_rect)
     if display_self:
         screen.blit(display_self_text,display_self_rect)
         draw_wrapped_text(screen,display_self_desc,small_font,'Black',description_rect)
         screen.blit(display_self_subtext, coordinates_display_subtitle)
+        screen.blit(c7_bigcard_surf, bigcard_rect)
     if display_house:
         screen.blit(display_house_text,display_house_rect)
         draw_wrapped_text(screen,display_house_desc,small_font,'Black',description_rect)
         screen.blit(display_house_subtext, coordinates_display_subtitle)
+        screen.blit(c8_bigcard_surf, bigcard_rect)
     if display_hopes:
         screen.blit(display_hopes_text,display_hopes_rect)
         draw_wrapped_text(screen,display_hopes_desc,small_font,'Black',description_rect)
         screen.blit(display_hopes_subtext, coordinates_display_subtitle)
+        screen.blit(c9_bigcard_surf, bigcard_rect)
     if display_outcome:
         screen.blit(display_outcome_text,display_outcome_rect)
         draw_wrapped_text(screen,display_outcome_desc,small_font,'Black',description_rect)
         screen.blit(display_outcome_subtext, coordinates_display_subtitle)
+        screen.blit(c10_bigcard_surf, bigcard_rect)
 
     # Blitting Cards on Board
     if game.c0 != 0:
